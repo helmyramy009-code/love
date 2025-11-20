@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>For My Princess ❤️</title>
+<style>
+/* أساسيات الصفحة */
+body {
+    margin:0;
+    padding:0;
+    font-family:"Arial",sans-serif;
+    text-align:center;
+    color:white;
+    overflow:hidden;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(120deg,#ff9a9e,#fad0c4);
+    transition:background 1s ease-in-out;
+}
+
+/* نص متوهج */
+.glowText {
+    text-shadow:0 0 8px rgba(255,255,255,0.8),
+                0 0 15px rgba(255,192,203,0.6),
+                0 0 20px rgba(255,105,180,0.6);
+}
+
+/* محتوى الرسائل */
+#content {
+    font-size:28px;
+    font-weight:bold;
+    padding:20px;
+    min-height:120px;
+    max-width:80%;
+    line-height:1.5;
+}
+
+/* زر التالي */
+#nextBtn {
+    padding:15px 35px;
+    font-size:22px;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    background:linear-gradient(45deg,#ff9ccf,#ffc3a0);
+    color:white;
+    font-weight:bold;
+    box-shadow:0 0 15px rgba(255,255,255,0.8);
+    transition:0.3s;
+    margin-top:20px;
+}
+#nextBtn:hover {
+    transform:scale(1.1);
+    background:linear-gradient(45deg,#ffb6d9,#ffdeb3);
+}
+
+/* لعبة القلوب */
+#heartsContainer {
+    margin-top:30px;
+    background:linear-gradient(135deg,#ffb3c6,#ffcfd2);
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 0 20px rgba(255,255,255,0.5);
+}
+#heartsContainer p { font-size:24px; margin-bottom:20px; line-height:1.4; }
+.heart { font-size:50px; cursor:pointer; transition: transform 0.3s,color 0.3s; margin:10px; display:inline-block; }
+.heart:hover { transform:scale(1.5) rotate(-10deg); color:#ff4d6d; }
+#loveCounter { font-size:22px; margin-top:10px; color:#ffe6f2; font-weight:bold; }
+#finalMessage { font-size:26px; margin-top:30px; min-height:60px; max-width:80%; line-height:1.4; }
+
+/* floating effects */
+.floatingHeart,.floatingStar,.floatingBubble,.fallingGift { position:fixed; pointer-events:none; }
+.floatingHeart { font-size:20px; animation:floatUp linear forwards; }
+.floatingStar { font-size:15px; color:gold; animation:floatUpStars linear forwards; }
+.floatingBubble { font-size:12px; color:#ffe6f2; animation:floatUpBubbles linear forwards; }
+.fallingGift { font-size:30px; animation:fallGift linear forwards; }
+
+@keyframes floatUp { 0%{transform:translateY(100vh) scale(1);opacity:1;} 100%{transform:translateY(-10vh) scale(0.5);opacity:0;} }
+@keyframes floatUpStars { 0%{transform:translateY(100vh) scale(1) rotate(0deg);opacity:1;} 100%{transform:translateY(-10vh) scale(0.3) rotate(360deg);opacity:0;} }
+@keyframes floatUpBubbles { 0%{transform:translateY(100vh) scale(1);opacity:0.6;} 100%{transform:translateY(-10vh) scale(0.2);opacity:0;} }
+@keyframes fallGift { 0%{transform:translateY(-50px) scale(1);opacity:0;} 50%{opacity:1;} 100%{transform:translateY(100vh) scale(0.8);opacity:0;} }
+
+/* final gallery */
+#finalGallery { display:none; margin-top:30px; text-align:center; }
+#finalGallery img { width:300px; border-radius:20px; box-shadow:0 0 25px rgba(255,255,255,0.7); transition: all 0.6s ease; opacity:0; transform: scale(0.8) rotate(-5deg); }
+#finalGallery img.show{ opacity:1; transform: scale(1.05) rotate(0deg); }
+#nextImageBtn { margin-top:10px; padding:10px 20px; font-size:18px; border-radius:15px; cursor:pointer; background: linear-gradient(45deg,#ff9ccf,#ffc3a0); color:white; border:none; }
+
+/* الخلفية الليلية */
+body::before {
+    content:"";
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: radial-gradient(ellipse at bottom,#0b0c27 0%,#1a1a40 100%);
+    z-index:-2;
+}
+.star {
+    position:fixed;
+    width:2px; height:2px;
+    background:white;
+    border-radius:50%;
+    opacity:0.8;
+    z-index:-1;
+    animation:twinkle linear infinite;
+}
+@keyframes twinkle { 0%{opacity:0.2;} 50%{opacity:1;} 100%{opacity:0.2;} }
+
+/* فيديو المفاجأة */
+#surpriseVideo { display:none; width:80%; max-width:600px; border-radius:15px; box-shadow:0 0 20px rgba(255,255,255,0.7); margin-top:30px; }
+#skipVideoBtn { display:none; padding:10px 20px; font-size:18px; border-radius:15px; cursor:pointer; background: linear-gradient(45deg,#ff9ccf,#ffc3a0); color:white; border:none; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<audio id="song" src="romantic.mp3" loop></audio>
+<audio id="popSound" src="pop.mp3"></audio>
+
+<div id="content" class="glowText"></div>
+<button id="nextBtn">دوسي ياقمري 💖</button>
+
+<!-- الفيديو -->
+<video id="surpriseVideo" src="surprise.mp4" controls></video>
+<button id="skipVideoBtn">تخطي الفيديو ⏩</button>
+
+<div id="heartsContainer"></div>
+<div id="loveCounter"></div>
+<div id="finalMessage" class="glowText"></div>
+
+<div id="finalGallery">
+    <img id="finalImage" src="">
+    <br>
+    <button id="nextImageBtn">الصورة اللي بعدها 🌹</button>
+</div>
+
+<script>
+let page=0, heartsClicked=0, currentImageIndex=0;
+const galleryImages=[
+"image1.jpg","image2.jpg","image3.jpg","image4.jpg","image5.jpg","image6.jpg","image7.jpg",
+"image8.jpg","image9.jpg","image10.jpg","image11.jpg","image12.jpg","image13.jpg","image14.jpg",
+"image15.jpg","image16.jpg","image17.jpg"
+];
+
+const pages=[
+{ text:"يا أجمل بنت في الدنيا… وجودك لوحده بيغيّر يومي ❤️", bg:"linear-gradient(120deg,#ff9a9e,#fad0c4)" },
+{ text:"إنتي مش شبه حد… إنتي مميزة بنبرة صوتك وبساطتك 💕", bg:"linear-gradient(120deg,#a1c4fd,#c2e9fb)" },
+{ text:"كل مرة بكلمك… بحس إن روحي بترجعلي تاني ✨", bg:"linear-gradient(120deg,#fbc2eb,#a6c1ee)" },
+{ text:"إنتي أجمل لحظة في يومي 💖", bg:"linear-gradient(120deg,#fddde6,#ffc9de)" },
+{ text:"ضحكتك تنوّر حياتي 🌹", bg:"linear-gradient(120deg,#ffd1dc,#ffb6c1)" },
+{ text:"وجودك جنبي بيخلي كل حاجة أحلى ✨", bg:"linear-gradient(120deg,#c1f0f6,#a1e7ff)" },
+{ text:"أنتي الأمان والفرحة لقلبي 💗", bg:"linear-gradient(120deg,#fde2ff,#ffc1e3)" },
+{ text:"والله انتي فرحتي اللي ربنا رزقني بيها 🌹", bg:"linear-gradient(120deg,#ffecd2,#fcb69f)" },
+{ text:"ربنا يخليكي ليا ومايحرمنيش من ضحكتك أبدًا 💗", bg:"linear-gradient(120deg,#fddb92,#d1fdff)" },
+{ text:"جاهزة لمفاجأة كبيرة؟ 😍🎁", bg:"linear-gradient(120deg,#ff9a9e,#fecfef)", last:true }
+];
+
+function typeWriter(element,text,index,callback){
+    if(index<text.length){
+        element.innerHTML+=text.charAt(index);
+        setTimeout(()=>typeWriter(element,text,index+1,callback),70);
+    }else if(callback) callback();
+}
+
+function loadPage(){
+    document.getElementById("content").innerHTML="";
+    document.body.style.background=pages[page].bg;
+    typeWriter(document.getElementById("content"),pages[page].text,0,()=>{
+        if(pages[page].last){
+            document.getElementById("nextBtn").style.display="none";
+            showSurpriseVideo();
+        }
+    });
+}
+
+document.getElementById("nextBtn").addEventListener("click",()=>{
+    document.getElementById("song").play().catch(()=>{});
+    page++; if(page<pages.length) loadPage();
+});
+
+function showSurpriseVideo(){
+    const video=document.getElementById("surpriseVideo");
+    const skipBtn=document.getElementById("skipVideoBtn");
+    video.style.display="block"; skipBtn.style.display="inline-block";
+    video.play().catch(()=>{});
+    video.onended=()=>{ video.style.display="none"; skipBtn.style.display="none"; showHeartsGame(); };
+    skipBtn.onclick=()=>{ video.pause(); video.style.display="none"; skipBtn.style.display="none"; showHeartsGame(); };
+}
+
+function showHeartsGame(){
+    const heartsContainer=document.getElementById("heartsContainer");
+    heartsContainer.innerHTML=`<p>كل سنة وإنتي حبيبتي ونور عيني ❤️🌹<br>كل سنة واحنا مع بعض 💖✨</p>`;
+    for(let i=0;i<5;i++){
+        let heart=document.createElement("span");
+        heart.innerHTML="❤️"; heart.className="heart";
+        heart.addEventListener("click",()=>heartClicked(heart));
+        heartsContainer.appendChild(heart);
+    }
+    document.getElementById("loveCounter").innerText="❤️ 0/5";
+}
+
+function heartClicked(heart){
+    heart.style.transform="scale(0)"; heartsClicked++;
+    document.getElementById("loveCounter").innerText=`❤️ ${heartsClicked}/5`;
+    const popSound=document.getElementById("popSound");
+    popSound.currentTime=0; popSound.play().catch(()=>{});
+    if(heartsClicked===5){ setTimeout(playSongAndShowMessage,500); startFloatingEffects(); startFallingGifts(); }
+}
+
+function playSongAndShowMessage(){
+    const finalMessage=document.getElementById("finalMessage");
+    const text="إنتي النور اللي بينور حياتي… بحبك من قلبي كله ❤️💖✨";
+    typeWriter(finalMessage,text,0,()=>showFinalGallery());
+}
+
+function startFloatingEffects(){
+    setInterval(()=>{
+        for(let i=0;i<11;i++){
+            // قلب
+            let heart=document.createElement("div"); heart.className="floatingHeart";
+            heart.style.left=Math.random()*window.innerWidth+"px";
+            heart.style.fontSize=15+Math.random()*25+"px";
+            heart.style.animationDuration=3+Math.random()*3+"s";
+            heart.innerHTML="💖"; document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),6000);
+
+            // نجوم
+            let star=document.createElement("div"); star.className="floatingStar";
+            star.style.left=Math.random()*window.innerWidth+"px";
+            star.style.fontSize=10+Math.random()*20+"px";
+            star.style.animationDuration=2+Math.random()*2+"s"; star.innerHTML="✨";
+            document.body.appendChild(star); setTimeout(()=>star.remove(),5000);
+
+            // فقاعات
+            let bubble=document.createElement("div"); bubble.className="floatingBubble";
+            bubble.style.left=Math.random()*window.innerWidth+"px";
+            bubble.style.fontSize=10+Math.random()*15+"px";
+            bubble.style.animationDuration=4+Math.random()*3+"s";
+            bubble.innerHTML="💫"; document.body.appendChild(bubble);
+            setTimeout(()=>bubble.remove(),5000);
+
+            // نجوم إضافية مع كل تأثير
+            let extraStar=document.createElement("div"); extraStar.className="floatingStar";
+            extraStar.style.left=Math.random()*window.innerWidth+"px";
+            extraStar.style.fontSize=5+Math.random()*15+"px";
+            extraStar.style.animationDuration=2+Math.random()*3+"s"; extraStar.innerHTML="✨";
+            document.body.appendChild(extraStar); setTimeout(()=>extraStar.remove(),5000);
+        }
+    },200);
+}
+
+function startFallingGifts(){
+    setInterval(()=>{
+        let gift=document.createElement("div"); gift.className="fallingGift";
+        gift.style.left=Math.random()*window.innerWidth+"px";
+        gift.style.fontSize=25+Math.random()*15+"px";
+        gift.innerHTML="🎁✨"; // إضافة نجمة صغيرة مع كل هدية
+        document.body.appendChild(gift);
+        setTimeout(()=>gift.remove(),6000);
+    },1200);
+}
+
+function showFinalGallery(){
+    const gallery=document.getElementById("finalGallery");
+    gallery.style.display="block";
+    const img=document.getElementById("finalImage");
+    img.src=galleryImages[currentImageIndex]; img.classList.add("show");
+}
+
+document.getElementById("nextImageBtn").addEventListener("click",()=>{
+    const img=document.getElementById("finalImage");
+    img.classList.remove("show");
+    setTimeout(()=>{
+        currentImageIndex=(currentImageIndex+1)%galleryImages.length;
+        img.src=galleryImages[currentImageIndex]; img.classList.add("show");
+    },200);
+});
+
+// إنشاء النجوم الصغيرة في الخلفية
+function createStars(numStars=80){
+    for(let i=0;i<numStars;i++){
+        let star=document.createElement("div"); star.className="star";
+        star.style.top=Math.random()*window.innerHeight+"px";
+        star.style.left=Math.random()*window.innerWidth+"px";
+        star.style.width=1+Math.random()*3+"px";
+        star.style.height=1+Math.random()*3+"px";
+        star.style.animationDuration=(2+Math.random()*3)+"s";
+        document.body.appendChild(star);
+    }
+}
+createStars(80);
+
+loadPage();
+</script>
+</body>
+</html>
